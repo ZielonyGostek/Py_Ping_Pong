@@ -1,16 +1,21 @@
-# This is a sample Python script.
+import pygame
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+pygame.init()
+window = pygame.display.set_mode((1200, 800)) # WYMIARY TŁA W PX
 
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+
+run = True
+while run:
+    pygame.time.Clock().tick(60) # 60 OZNACZA ŻE PĘTLA WYKONUJE SIĘ 60 RAZY NA SEKUNDĘ
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT: # ZAMKNIĘCIE PRZEZ UŻYTKOWNIKA X
+            run = False
+    TYTUŁ= pygame.font.Font.render(pygame.font.SysFont("Sonic Cut", 345), "Ping Pong", True, (31, 112, 31))
+
+
+    window.fill((65, 66, 65)) # RYSOWANIE TŁA
+    window.blit(TYTUŁ, (0,0))
+    pygame.display.update()
+
