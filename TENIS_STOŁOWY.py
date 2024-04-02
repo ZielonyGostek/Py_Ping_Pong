@@ -8,12 +8,10 @@ pygame.display.set_caption("Menu")
 
 BG = pygame.image.load("grafika/Background.png")
 
-
-def get_font(size):  # Returns Press-Start-2P in the desired size
+def get_font(size):
     return pygame.font.Font("grafika/font.ttf", size)
 
-
-def G1():
+def GRACZ():
     while True:
         PLAY_MOUSE_POS = pygame.mouse.get_pos()
 
@@ -36,11 +34,7 @@ def G1():
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if PLAY_BACK.checkForInput(PLAY_MOUSE_POS):
                     main_menu()
-
-        pygame.display.update()
-
-
-def G2():
+def GRACZE():
     while True:
         OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
 
@@ -65,28 +59,29 @@ def G2():
                     main_menu()
 
         pygame.display.update()
-
 def ZASADY():
     print("ZASADY")
+
 def main_menu():
+    pygame.display.set_caption('Menu')
+
     while True:
-        SCREEN.blit(BG, (0, 0))
+        SCREEN.blit(BG,(0,0))
 
         MENU_MOUSE_POS = pygame.mouse.get_pos()
 
-        MENU_TEXT = get_font(100).render("Ping Pong", True, "#32cd32")
-        MENU_RECT = MENU_TEXT.get_rect(center=(640, 100))
+        MENU_TEXT = get_font(100).render("PING PONG", True, "#32CD32")
+        MENU_RECT = MENU_TEXT.get_rect(center=(800, 250))
 
-        G1_BUTTON = Button(image=pygame.image.load("grafika/1g.png"), pos=(640, 250),
-                             text_input="1 GRACZ", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
-        G2_BUTTON = Button(image=pygame.image.load("grafika/2g.png"), pos=(640, 400),
-                                text_input="2 GRACZY", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
-        ZASADY_BUTTON = Button(image=pygame.image.load("grafika/ZASADY.png"), pos=(640, 550),
-                             text_input="ZASADY", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
+        GRACZ1_BUTTON = Button(image=pygame.image.load("grafika/1g.png"), pos=(640,250),text_input="1 GRACZ", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
+
+        GRACZ2_BUTTON = Button(image=pygame.image.load("grafika/2g.png"), pos=(640,400),text_input="2 GRACZ", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
+
+        ZASADY_BUTTON = Button(image=pygame.image.load("grafika/ZASADY.png"), pos=(640, 550),text_input="ZASADY", font=get_font(75), base_color="#d7fcd4", hovering_color="White")
 
         SCREEN.blit(MENU_TEXT, MENU_RECT)
 
-        for button in [G1_BUTTON, G2_BUTTON, ZASADY_BUTTON]:
+        for button in [GRACZ1_BUTTON, GRACZ2_BUTTON, ZASADY_BUTTON]:
             button.changeColor(MENU_MOUSE_POS)
             button.update(SCREEN)
 
@@ -94,15 +89,17 @@ def main_menu():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if G1_BUTTON.checkForInput(MENU_MOUSE_POS):
-                    G1()
-                if G2_BUTTON.checkForInput(MENU_MOUSE_POS):
-                    G2()
-                if ZASADY_BUTTON.checkForInput(MENU_MOUSE_POS):
-                   ZASADY()
 
-        pygame.display.update()
-
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            if GRACZ1_BUTTON.checkForInput(MENU_MOUSE_POS):
+                GRACZ()
+            if GRACZ2_BUTTON.checkForInput(MENU_MOUSE_POS):
+                GRACZE()
+            if ZASADY_BUTTON.checkForInput(MENU_MOUSE_POS):
+                ZASADY()
+    pygame.display.update()
 
 main_menu()
+
+
+
