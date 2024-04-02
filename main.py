@@ -4,7 +4,7 @@ from Button import Button
 pygame.init()
 
 SCREEN = pygame.display.set_mode((1280, 720))
-pygame.display.set_caption("Menu")
+pygame.display.set_caption("Ping Pong By TOMASZ MAN i JAKUB BRYDZIŃSKI")
 
 BG = pygame.image.load("grafika/Background.png")
 
@@ -17,7 +17,7 @@ def G1():
     while True:
         PLAY_MOUSE_POS = pygame.mouse.get_pos()
 
-        SCREEN.fill("black")
+        SCREEN.fill((0, 100, 0))
 
         PLAY_TEXT = get_font(45).render("This is the PLAY screen.", True, "White")
         PLAY_RECT = PLAY_TEXT.get_rect(center=(640, 260))
