@@ -67,7 +67,52 @@ def G2():
         pygame.display.update()
 
 def ZASADY():
-    print("ZASADY")
+    while True:
+        OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
+
+        SCREEN.fill("Black")
+
+        G1_TEXT = get_font(45).render("1 GRACZ", True, "White")
+        G1_RECT = G1_TEXT.get_rect(center=(200, 90))
+        SCREEN.blit(G1_TEXT, G1_RECT)
+
+        G1_ZASADY_TEXT = get_font(15).render("Gracz porusza się strzałkami lewo, prawo.",  True, "White")
+        G1_ZASADY_RECT = G1_ZASADY_TEXT.get_rect(center=(340, 140))
+
+        G1_ZASADY2_TEXT = get_font(15).render("Każde odbicie piłki od rakiety to jeden punkt.", True, "White")
+        G1_ZASADY2_RECT = G1_ZASADY2_TEXT.get_rect(center=(380, 160))
+
+        G1_ZASADY3_TEXT = get_font(15).render("Gracz ma trzy szanse, aby grać dalej. każde piłka, która spadnie daje -1 punkt.", True, "White")
+        G1_ZASADY3_RECT = G1_ZASADY3_TEXT.get_rect(center=(625, 180))
+
+        SCREEN.blit(G1_ZASADY_TEXT, G1_ZASADY_RECT)
+        SCREEN.blit( G1_ZASADY2_TEXT, G1_ZASADY2_RECT)
+        SCREEN.blit( G1_ZASADY3_TEXT, G1_ZASADY3_RECT)
+
+
+        G2_TEXT = get_font(45).render("2 GRACZ", True, "White")
+        G2_RECT = G2_TEXT.get_rect(center=(200, 350))
+        SCREEN.blit(G2_TEXT, G2_RECT)
+
+        G2_ZASADY_TEXT = get_font(20).render("Gracz porusza się strzałkami lewo, prawo", True, "White")
+        G2_ZASADY_RECT = G2_ZASADY_TEXT.get_rect(center=(480, 400))
+        SCREEN.blit(G2_ZASADY_TEXT, G2_ZASADY_RECT)
+
+        OPTIONS_BACK = Button(image=None, pos=(1205, 650),
+                              text_input="BACK", font=get_font(30), base_color="Grey", hovering_color="Green")
+
+        OPTIONS_BACK.changeColor(OPTIONS_MOUSE_POS)
+        OPTIONS_BACK.update(SCREEN)
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if OPTIONS_BACK.checkForInput(OPTIONS_MOUSE_POS):
+                    main_menu()
+
+        pygame.display.update()
 def main_menu():
     while True:
         SCREEN.blit(BG, (0, 0))

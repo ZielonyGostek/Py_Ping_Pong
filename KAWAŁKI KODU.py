@@ -19,3 +19,5 @@ keys = pygame.key.get_pressed()
     player = pygame.rect.Rect(x, y, 40, 150)
 
 pygame.draw.rect(window, (50, 205, 50), player)  # RYSOWANIE RAKIETKI
+
+Każde odbicie piłki od rakiety to jeden punkt.
