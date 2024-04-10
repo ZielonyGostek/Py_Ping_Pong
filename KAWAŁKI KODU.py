@@ -21,3 +21,22 @@ keys = pygame.key.get_pressed()
 pygame.draw.rect(window, (50, 205, 50), player)  # RYSOWANIE RAKIETKI
 
 Każde odbicie piłki od rakiety to jeden punkt.
+
+PLAY_MOUSE_POS = pygame.mouse.get_pos()
+
+SCREEN.fill((0, 100, 0))
+
+PLAY_BACK = Button(image=None, pos=(640, 460),
+                   text_input="BACK", font=get_font(75), base_color="White", hovering_color="Green")
+
+PLAY_BACK.changeColor(PLAY_MOUSE_POS)
+PLAY_BACK.update(SCREEN)
+
+for event in pygame.event.get():
+    if event.type == pygame.QUIT:
+        pygame.quit()
+        sys.exit()
+    if event.type == pygame.MOUSEBUTTONDOWN:
+        if PLAY_BACK.checkForInput(PLAY_MOUSE_POS):
+            main_menu()
+
