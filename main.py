@@ -34,13 +34,13 @@ def G1():
         if keys[pygame.K_LEFT]:  # STRZAłKA W LEWO
             x -= 1
 
-        rakietka = pygame.rect.Rect(x, y, 200, 50)  # tworzy prostokąt
 
 # WYKRYWANIE KRAWĘDZI OD 38 do 41 (POMOCY)
         if x <= 0:
             x += 1
-        if x >= 1280:
-            x -= -1
+        if x >= 1080:
+            x -= 1
+        rakietka = pygame.rect.Rect(x, y, 200, 50)  # tworzy prostokąt
 
         player = pygame.rect.Rect(x, y, 40, 150)
         pygame.draw.rect(SCREEN,(255,51, 51),rakietka)
