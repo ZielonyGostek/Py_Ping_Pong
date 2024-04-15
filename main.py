@@ -48,30 +48,41 @@ def G1():
 
 
 def G2():
-    while True:
-        OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
+    def gracze():
 
-        SCREEN.fill("white")
 
-        OPTIONS_TEXT = get_font(45).render("This is the OPTIONS screen.", True, "Black")
-        OPTIONS_RECT = OPTIONS_TEXT.get_rect(center=(640, 260))
-        SCREEN.blit(OPTIONS_TEXT, OPTIONS_RECT)
 
-        OPTIONS_BACK = Button(image=None, pos=(640, 460),
-                              text_input="BACK", font=get_font(75), base_color="Black", hovering_color="Green")
+        win = pygame.display.set_mode((1280, 720))
+        pygame.display.set_caption('First Game')
+        paletka_1y = 15
+        paletka_2y = 15
+        szerokosc_p = 25
+        wysokosc_p = 70
+        value = 15
+        run = True
+        while run:
+            pygame.time.delay(100)
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    run = False
+            keys = pygame.key.get_pressed()
+            if keys[pygame.K_w] and paletka_1y >= value:
+                paletka_1y -= value
+            if keys[pygame.K_s] and paletka_1y <= 720 - wysokosc_p - value:
+                paletka_1y += value
+            if keys[pygame.K_UP] and paletka_2y >= value:
+                paletka_2y -= value
+            if keys[pygame.K_DOWN] and paletka_2y <= 720 - wysokosc_p - value:
+                paletka_2y += value
+            win.fill((0, 0, 0))
+            pygame.draw.rect(win, (255, 0, 0), (5, paletka_1y, szerokosc_p, wysokosc_p))
+            pygame.draw.rect(win, (255, 0, 0), (1250, paletka_2y, szerokosc_p, wysokosc_p))
+            pygame.draw.circle(win, (255, 255, 255), (300, 400), 20)
+            pygame.display.update()
 
-        OPTIONS_BACK.changeColor(OPTIONS_MOUSE_POS)
-        OPTIONS_BACK.update(SCREEN)
+        pygame.quit()
 
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if OPTIONS_BACK.checkForInput(OPTIONS_MOUSE_POS):
-                    main_menu()
-
-        pygame.display.update()
+    gracze()
 
 def ZASADY():
     while True:
