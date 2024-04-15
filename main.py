@@ -48,17 +48,14 @@ def G1():
 
 
 def G2():
-    def gracze():
-
-
 
         win = pygame.display.set_mode((1280, 720))
         pygame.display.set_caption('First Game')
-        paletka_1y = 15
-        paletka_2y = 15
-        szerokosc_p = 25
-        wysokosc_p = 70
-        value = 15
+        paletka_1y = 50
+        paletka_2y = 200
+        szerokosc_p = 50
+        wysokosc_p = 200
+        value = 50
         run = True
         while run:
             pygame.time.delay(100)
@@ -75,14 +72,14 @@ def G2():
             if keys[pygame.K_DOWN] and paletka_2y <= 720 - wysokosc_p - value:
                 paletka_2y += value
             win.fill((0, 0, 0))
-            pygame.draw.rect(win, (255, 0, 0), (5, paletka_1y, szerokosc_p, wysokosc_p))
-            pygame.draw.rect(win, (255, 0, 0), (1250, paletka_2y, szerokosc_p, wysokosc_p))
+            pygame.draw.rect(win, (255, 0, 0), (10, paletka_1y, szerokosc_p, wysokosc_p))
+            pygame.draw.rect(win, (255, 0, 0), (1220, paletka_2y, szerokosc_p, wysokosc_p))
             pygame.draw.circle(win, (255, 255, 255), (300, 400), 20)
             pygame.display.update()
 
         pygame.quit()
 
-    gracze()
+
 
 def ZASADY():
     while True:
