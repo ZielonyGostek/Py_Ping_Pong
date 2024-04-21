@@ -14,125 +14,178 @@ def get_font(size):  # Returns Press-Start-2P in the desired size
 
 
 def G1():
-    SCREEN_WIDTH = 1280
-    SCREEN_HEIGHT = 720
-   #położenie początkowe rakietki
-    x = 550
-    y = 640
-    rakietka = pygame.rect.Rect(x, y, 200, 50) # tworzy prostokąt
-
+    FPS = pygame.time.Clock()
+    GREEN = (0, 100, 0)
+    RED = (255, 0, 0)
     WHITE = (255, 255, 255)
     BLACK = (0, 0, 0)
 
-    #położenie początkowe piłki
-    '''bx = 600
-    by = 350
+    player_score = 0
+    game_font = pygame.font.Font('grafika/font.ttf', 40)
+    Licznik_życia = 3
 
-    radius = 20
-    width = 1280
-    height = 720
-    szerokosc_p = 50
-    wysokosc_p = 200
-    def raketka_touch(rakietka,x,y, bx, by):
-        return rakietka + wysokosc_p'''
+    S = 7
+
+    Ball_x = 7
+    Ball_y = 7
+
+    Player = pygame.Rect(550, 640, 200, 50)
+    Ball = pygame.Rect(385, 385, 30, 30)
+
+    Bottom_wall = pygame.Rect(0, 720, 1280, 30)
+
+    def BG_finish():
+        OPTIONS_MOUSE_POS = pygame.mouse.get_pos()
+
+        SCREEN.fill(BLACK)
+        font = pygame.font.Font(None, 100)
+        text = font.render('Koniec gry Twój wynik to {}'.format(player_score), False, WHITE)
+        SCREEN.blit(text, (200, 250))
+        pygame.display.update()
+        pygame.time.delay(5000)
+        main_menu()
 
 
-    object_size = 30
-    object_x = SCREEN_WIDTH // 2
-    object_y = SCREEN_HEIGHT // 2
-    object_speed_x = 5
-    object_speed_y = 5
+    def draw():
+        FPS.tick(60)
+        SCREEN.fill(GREEN)
+        pygame.draw.rect(SCREEN, RED, Player)
+        pygame.draw.ellipse(SCREEN, WHITE, Ball)
+        pygame.draw.rect(SCREEN, BLACK, Bottom_wall)
 
-    rakietka_speed_x = 5
+    def Move():
+        if keys[pygame.K_RIGHT]:
+            Player.x += S
+        if keys[pygame.K_LEFT]:
+            Player.x -= S
 
+    def Player_Border():
+        if Player.x <= 5:
+            S = 0
+            Player.x = 6
+        if Player.x >= 1080:
+            S = 0
+            Player.x = 1078
 
     while True:
-        SCREEN.fill((0, 100, 0))
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                sys.exit()
+
+        Ball.x += Ball_x
+        Ball.y += Ball_y
+
+        if Ball.top <= 0 or Ball.bottom >= 720:
+            Ball_y *= -1
+        if Ball.left <= 0 or Ball.right > 1280:
+            Ball_x *= -1
+
+        if Ball.colliderect(Player):
+            Ball_y *= -1
+            S += 0.8
+            player_score += 1
+
+        if Ball.colliderect((Bottom_wall)):
+            player_score += -1
+            Licznik_życia += -1
+
+        if Licznik_życia == 0:
+            BG_finish()
+
+
 
         keys = pygame.key.get_pressed()
 
-        if keys[pygame.K_RIGHT]:  # czy strzałka w prawo jest naciskana
-            x += 1
-        if keys[pygame.K_LEFT]:  # STRZAłKA W LEWO
-            x -= 1
+        draw()
+        Move()
+        Player_Border()
 
-
-
-        rakietka_speed_x += object_speed_x
-        object_x += object_speed_x
-        object_y += object_speed_y
-
-        # Odbijanie od krawędzi ekranu
-        if object_x <= 0 or object_x + object_size >= SCREEN_WIDTH:
-            object_speed_x *= -1
-        if object_y <= 0 or object_y + object_size >= SCREEN_HEIGHT:
-            object_speed_y *= -1
-        rakietka = pygame.rect.Rect(x, y, 200, 50)  # tworzy prostokąt
-
-
-        # Opóźnienie, aby nie przekraczać zadanej prędkości klatek na sekundę
-        pygame.time.Clock().tick(60)
-
-        # WYKRYWANIE KRAWĘDZI
-        if x <= 0:
-            x += 1
-        if x >= 1080:
-            x -= 1
-
-
-        pygame.draw.rect(SCREEN, BLACK, (object_x, object_y, object_size, object_size))
-        player = pygame.rect.Rect(x, y, 40, 150)
-        pygame.draw.rect(SCREEN,(255,51, 51),rakietka)
-       # ball = pygame.draw.circle(SCREEN, (255, 255, 255), (bx, by), 20)
+        player_text = game_font.render(f"{player_score}", False, BLACK)
+        SCREEN.blit(player_text, (598, 150))
         pygame.display.update()
 
-
 def G2():
-    radius = 20
+    pygame.init()
     width = 1280
     height = 720
-    szerokosc_p = 50
-    wysokosc_p = 200
-
-    def left_touch(paletka_1y, paletka_1x, wysokosc_p, ball_x, ball_y):
-        return paletka_1y + wysokosc_p >= ball_y >= paletka_1y and ball_x <= paletka_1x + szerokosc_p + radius
-
-    # x + szerokość_p  >= piłka_y >= x and y == piłka _y - radius
-
-    def right_touch(paletka_2y, paletka_2x, wysokosc_p, ball_x, ball_y):
-        return paletka_2y + wysokosc_p >= ball_y >= paletka_2y and ball_x >= paletka_2x - radius
-
-    def winner(ball_x):
-        if ball_x <= 0:
-            print_winner(1)
-        if ball_x >= width:
-            print_winner(2)
-
-    def print_winner(player):
-        print(f'Paletka {player} wygrała')
-        pygame.time.delay(1000)
-        exit()
-
-    pygame.init()
-
     win = pygame.display.set_mode((width, height))
     pygame.display.set_caption('First Game')
 
-    paletka_1y = 200
-    paletka_2y = 200
+    value = 2
+    ball_x = width / 2
+    ball_y = height / 2
+    ball_radius = 20
+    ball_value_x = value
+    ball_value_y = value
+
+    paletka_width = 50
+    paletka_height = 200
     paletka_1x = 10
+    paletka_1y = 200
     paletka_2x = 1220
+    paletka_2y = 200
+
     k = True
-    value = 1
-    ball_x = 340
-    ball_y = 620
-    value_ballx = value
-    value_bally = value
+    player_1 = 0
+    player_1s = 0
+    player_2 = 0
+    player_2s = 0
+
+    def punkty(player_1s, player_2s, player_1, player_2):
+        font = pygame.font.Font(None, 36)
+        sety = font.render(f'{player_1s}-{player_2s}', True, (255, 255, 255))
+        win.blit(sety, (630, 100))
+
+        font = pygame.font.Font(None, 70)
+        punkty = font.render(f'{player_1}-{player_2}', True, (255, 255, 255))
+        win.blit(punkty, (width / 2 - 30, 30))
+
+    def left_touch():
+        return touch(paletka_1y, ball_y) and ball_x <= paletka_1x + paletka_width + ball_radius
+
+    def right_touch():
+        return touch(paletka_2y, ball_y) and ball_x >= paletka_2x - ball_radius
+
+    def touch(paletka_y, ball_y):
+        return paletka_y + paletka_height >= ball_y >= paletka_y
+
+    def winner():
+        nonlocal player_1s, player_2s, player_1, player_2
+        if ball_x <= ball_radius:
+            player_2, player_2s = kk(player_2, player_1, player_2s)
+            # c.x += 2
+        if ball_x >= width - ball_radius:
+            player_1, player_1s = kk(player_1, player_2, player_1s)
+            # c.x -= 2
+        if player_1s == 3:
+            print_winner(1)
+        if player_2s == 3:
+            print_winner(2)
+        return player_1s, player_2s, player_1, player_2
+
+    def kk(player_a, player_b, player_s):
+        nonlocal ball_x, ball_y, player_1, player_2, k
+        player_a += 1
+        ball_x = 640
+        ball_y = 360
+        if player_a >= 11 and player_a - player_b >= 2:
+            player_a = 0
+            player_1 = 0
+            player_2 = 0
+            player_s += 1
+        k = True
+        return player_a, player_s
+
+    def print_winner(player):
+        font = pygame.font.Font(None, 150)
+        wynik = font.render(f'Wygrał gracz: {player}', True, (255, 255, 255))
+        win.blit(wynik, (200, 360))
+        pygame.display.update()
+        pygame.time.delay(5000)
+        main_menu()
+
+
+
     run = True
     while run:
         pygame.time.delay(2)
@@ -148,30 +201,29 @@ def G2():
             paletka_2y -= value
         if keys[pygame.K_DOWN] and paletka_2y != 520:
             paletka_2y += value
-        ball_x += value_ballx
-        ball_y += value_bally
-        if left_touch(paletka_1y, paletka_1x, wysokosc_p, ball_x, ball_y) or \
-                right_touch(paletka_2y, paletka_2x, wysokosc_p, ball_x, ball_y):
-            value_ballx = -value_ballx
-        if (
-                ball_y == 20 or ball_y >= 700 or
-                (paletka_1y == ball_y - 20 and 10 <= ball_x <= 60) or
-                (paletka_1y == ball_y - wysokosc_p - 20 and 10 <= ball_x <= 60) or
-                (1220 <= ball_x <= 1270 and (paletka_2y ==
-                                             ball_y - wysokosc_p - 20 or paletka_2y == ball_y))
-        ):
-            value_bally = -value_bally
-        winner(ball_x)
-        print(paletka_1y, paletka_2y)
-        win.fill((0, 0, 0))
+        if keys[pygame.K_o]:
+            player_1 += 1
+        if keys[pygame.K_p]:
+            player_2 += 1
+        ball_x += ball_value_x
+        ball_y += ball_value_y
+        if left_touch() or right_touch():
+            ball_value_x = -ball_value_x
+        if (ball_y == 20 or ball_y >= 700 or
+            ((paletka_1y == ball_y - ball_radius or paletka_1y - paletka_height == ball_y + ball_radius) and paletka_1x <= ball_x <= paletka_1x + paletka_width) or ((paletka_2y == ball_y - ball_radius or paletka_2y - paletka_height == ball_y + ball_radius) and paletka_2x <= ball_x <= paletka_2x + paletka_width)):
+            ball_value_y = -ball_value_y
+        winner()
+
+        win.fill((0, 100, 0))
+        punkty(player_1s, player_2s, player_1, player_2)
         pygame.draw.rect(win, (255, 0, 0),
-                         (paletka_1x, paletka_1y, szerokosc_p, wysokosc_p))
-        pygame.draw.rect(win, (255, 0, 0),
-                         (paletka_2x, paletka_2y, szerokosc_p, wysokosc_p))
-        pygame.draw.circle(win, (255, 255, 255), (ball_x, ball_y), radius)
+                         (paletka_1x, paletka_1y, paletka_width, paletka_height))
+        pygame.draw.rect(win, (0, 0, 0),
+                         (paletka_2x, paletka_2y, paletka_width, paletka_height))
+        pygame.draw.circle(win, (255, 255, 255), (ball_x, ball_y), ball_radius)
         pygame.display.update()
         if k:
-            pygame.time.delay(2000)
+            pygame.time.delay(3000)
             k = False
     pygame.quit()
 
@@ -207,9 +259,17 @@ def ZASADY():
         G2_RECT = G2_TEXT.get_rect(center=(200, 350))
         SCREEN.blit(G2_TEXT, G2_RECT)
 
-        G2_ZASADY_TEXT = get_font(20).render("Gracz porusza się strzałkami lewo, prawo", True, "White")
-        G2_ZASADY_RECT = G2_ZASADY_TEXT.get_rect(center=(480, 400))
-        SCREEN.blit(G2_ZASADY_TEXT, G2_ZASADY_RECT)
+        G2_ZASADY4_TEXT = get_font(15).render("Gracz czewony porusza się 'W' 'S' a gracz czarny porusza się strzałkami góra dół.", True, "White")
+        G2_ZASADY4_RECT = G2_ZASADY4_TEXT.get_rect(center=(615, 400))
+        SCREEN.blit(G2_ZASADY4_TEXT, G2_ZASADY4_RECT)
+
+        G2_ZASADY5_TEXT = get_font(15).render("Każdy set gra się do 11 punktów.", True, "White")
+        G2_ZASADY5_RECT = G2_ZASADY5_TEXT.get_rect(center=(250, 425))
+        SCREEN.blit(G2_ZASADY5_TEXT, G2_ZASADY5_RECT)
+
+        G2_ZASADY6_TEXT = get_font(15).render("Wygrywa zawodnik, który uzyska te 3 sety jako pierwszy.", True, "White")
+        G2_ZASADY6_RECT = G2_ZASADY6_TEXT.get_rect(center=(450, 445))
+        SCREEN.blit(G2_ZASADY6_TEXT, G2_ZASADY6_RECT)
 
         OPTIONS_BACK = Button(image=None, pos=(1205, 650),
                               text_input="BACK", font=get_font(30), base_color="Grey", hovering_color="Green")
